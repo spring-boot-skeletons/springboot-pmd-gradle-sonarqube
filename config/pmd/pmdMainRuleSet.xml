@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<!-- Created Date : Dec-22-2019 -->
+<!-- Reference Link : https://pmd.github.io/latest/pmd_userdocs_making_rulesets.html -->
+
+<ruleset name="Custom Rules"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description> Spring Boot Gradle SonarQube </description>
+
+    <!-- START:: Project rules -->
+    
+    <rule ref="category/java/errorprone.xml/EmptyCatchBlock" />
+
+	<!-- END:: Project rules -->
+	
+</ruleset>

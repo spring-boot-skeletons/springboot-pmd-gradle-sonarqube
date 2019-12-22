@@ -1,0 +1,58 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+	id 'pmd'
+	id 'jacoco'
+	id 'org.sonarqube' version '2.7'
+}
+
+apply {
+	from "$rootDir/config/build/codeQuality.gradle"
+}
+
+group = 'com.springboot.gradle'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-couchbase'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	
+	testImplementation 'junit:junit:4.12'
+	
+	//testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.0'
+	
+	//testCompileOnly 'org.junit.jupiter:junit-jupiter-api:5.5.0'
+	
+	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+	//testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.0'
+	
+	
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+}
+
+test {
+	//useJUnitPlatform()
+    useJUnit()
+    maxHeapSize = '1G'
+}

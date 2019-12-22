@@ -1,0 +1,129 @@
+/** Created Date 	: Dec-22-2019  
+	File Structure 	:
+		1. Declarations section to declare all the necessary constants/versions
+		2. Configurations for Code Quality Plugins (PMD)
+		3. Configurations for Code Coverage Plugins (Jacoco)
+		4. Configurations for Collecting Metrics and Reporting (Sonarqube)
+		5. Describes sequence of execution
+**/
+
+/** START:: Declarations **/
+
+def pmdVersion = '6.20.0'
+
+/** END:: Declarations **/
+
+
+/** START:: Code Quality Plugins **/
+
+/** START:: Configurations for pmd **/ 
+/** 'pmd' is the plugin name used in build.gradle **/
+/** Reference File:  https://docs.gradle.org/current/userguide/pmd_plugin.html **/
+/** 'pmdMain' is a task **/
+
+pmd {
+    toolVersion = "$pmdVersion"
+}
+
+pmdMain {
+    ruleSetFiles = files("$rootDir/config/pmd/pmdMainRuleSet.xml")
+    ruleSets = []
+}
+
+/** END:: Configurations for pmd **/
+
+/** END:: Code Quality Plugins **/
+
+/** START:: Code Coverage Plugin **/
+
+/** 'jacoco' is the plugin name used in build.gradle **/
+/** Reference File: https://docs.gradle.org/current/userguide/jacoco_plugin.html **/
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.5
+            }
+        }
+
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['com.springboot.gradle.sonarqube.api.*']
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 0.3
+            }
+        }
+    }
+}
+
+/** END:: Code Coverage Plugin **/
+
+/** START:: Collecting Metrics and Reporting **/
+/** START:: 'sonarqube' is referenced in build.gradle **/
+
+sonarqube {
+    properties {
+        property 'sonar.exclusions', 'src/main/java/com/springboot/gradle/sonarqube/api/SpringbootGradleSonarqubeApplication.java'
+        
+        /**
+        	NOTE: 
+        		If you have a sonarqube server which does not run behind a proxy, 
+        		you can un-comment this options and remove proxy settings in gradle.properties file.
+        **/
+        //property 'sonar.host.url', 'http://localhost:9000'
+        //property 'sonar.login', 'admin'
+        //property 'sonar.password', 'admin'
+		
+		/**
+			NOTE: 
+				This server 'armscodetest101z.prod.jp.local' is reachable via a proxy. 
+				Hence gradle needs to know the proxy server details to push the sonar scanner results.
+				In order to do that, proxy server java args are configured in gradle.properties. 
+				"gradle.properties" is added as project specific file.   
+		**/
+        property 'sonar.host.url', 'http://armscodetest101z.prod.jp.local:9000'
+        property 'sonar.login', 'e3925fdb7cdfb235ce45b2209efe3cf673e5ab22'
+        
+        /**
+        	NOTE: 
+        		Setting these options here ("sonarQube" plugin) will NOT work. Refer gradle.properties file. 
+        **/
+        //property 'http.proxyHost', 'dev-proxy.db.rakuten.co.jp'
+        //property 'http.proxyPort', '8501'
+        //property 'https.proxyHost', 'dev-proxy.db.rakuten.co.jp'
+        //property 'https.proxyPort', '8501'
+    }
+}
+
+/** END:: **/
+/** END:: Collecting Metrics and Reporting **/
+
+pmdMain.shouldRunAfter test
+
+test.finalizedBy jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
+
+test {
+    jacoco {
+        destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+        classDumpDir = file("$buildDir/jacoco/classpathdumps")
+    }
+}
