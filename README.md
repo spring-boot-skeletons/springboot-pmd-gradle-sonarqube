@@ -11,7 +11,6 @@ Spring Boot Version : 2.2.2.RELEASE
 ### Plugin Configuration
 
 * PMD is configured for checking Main files. Test files are not configured.
-* "sonarqube" task is configured to publish the results to a remote server (armscodetest101z.prod.jp.local:9000)
 
 ### Build Procedure
 Command Line:
