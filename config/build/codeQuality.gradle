@@ -94,22 +94,22 @@ sonarqube {
 		
 		/**
 			NOTE: 
-				This server 'armscodetest101z.prod.jp.local' is reachable via a proxy. 
+				This server 'abcdef.ghijklmn' is reachable via a proxy. 
 				Hence gradle needs to know the proxy server details to push the sonar scanner results.
 				In order to do that, proxy server java args are configured in gradle.properties. 
 				"gradle.properties" is added as project specific file.   
 		**/
-        property 'sonar.host.url', 'http://armscodetest101z.prod.jp.local:9000'
-        property 'sonar.login', 'e3925fdb7cdfb235ce45b2209efe3cf673e5ab22'
+        property 'sonar.host.url', 'http://abcdef.ghijklmn:1234'
+        property 'sonar.login', 'abcdefghijklmnopqrstuvwxyz'
         
         /**
         	NOTE: 
         		Setting these options here ("sonarQube" plugin) will NOT work. Refer gradle.properties file. 
         **/
-        //property 'http.proxyHost', 'dev-proxy.db.rakuten.co.jp'
-        //property 'http.proxyPort', '8501'
-        //property 'https.proxyHost', 'dev-proxy.db.rakuten.co.jp'
-        //property 'https.proxyPort', '8501'
+        //property 'http.proxyHost', 'proxy.server.com'
+        //property 'http.proxyPort', '1234'
+        //property 'https.proxyHost', 'proxy.server.com'
+        //property 'https.proxyPort', '1234'
     }
 }
 
